@@ -1,10 +1,54 @@
-<h2>Nos Composants Informatiques</h2>
+<div class="page-container">
+  <aside class="sidebar">
+    <h3>FILTRER LES PRODUITS :</h3>
+    
+    <div class="filter-group">
+      <label>CHERCHER UNE RÉFÉRENCE</label>
+      <input type="text" placeholder="Désignation, modèle...">
+    </div>
 
-<div style="display: flex; gap: 20px; flex-wrap: wrap;">
-  <div *ngFor="let p of listeProduits" 
-       style="border: 1px solid #ccc; padding: 15px; border-radius: 8px; width: 200px;">
-    <h3>{{ p.nom }}</h3>
-    <p>{{ p.prix }} cfp</p>
-    <button>Acheter</button>
-  </div>
+    <div class="filter-group">
+      <label>PRIX (en CFP)</label>
+      <div class="range-placeholder">64 — 1500</div>
+    </div>
+
+    <div class="filter-group">
+      <label>MARQUE</label>
+      <select><option>Sélectionner</option></select>
+    </div>
+    
+    <button class="btn-more-filters">+ DE FILTRES</button>
+  </aside>
+
+  <main class="content">
+    <div class="content-header">
+      <span>{{ listeProduits.length }} PRODUITS CORRESPONDENT</span>
+      <div class="sort-by">
+        Trier par : <select><option>Défaut</option></select>
+      </div>
+    </div>
+
+    <div class="product-list">
+      <div class="product-card" *ngFor="let p of listeProduits">
+        <div class="product-img">
+          <img src="assets/box-placeholder.png" alt="Produit">
+        </div>
+        
+        <div class="product-info">
+          <h3>{{ p.nom }}</h3>
+          <p class="description">Carte mère Micro ATX Socket AM4...</p>
+          <div class="rating">★★★★★ <small>9 avis</small></div>
+        </div>
+
+        <div class="product-status">
+          <span class="stock-label">EN STOCK</span>
+        </div>
+
+        <div class="product-price-action">
+          <span class="price">{{ p.prix }} €</span>
+          <button class="buy-btn">🛒</button>
+        </div>
+      </div>
+    </div>
+  </main>
 </div>

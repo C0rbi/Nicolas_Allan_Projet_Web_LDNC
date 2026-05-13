@@ -4,6 +4,14 @@
             <img src="navbar/logo.png" alt="Logo de LDNC">
         </a>
     </div>
+
+    <div class="search-container">
+        <input type="text" class="search-input" placeholder="Chercher un produit, une marque, une catégorie...">
+        <button class="search-button" [routerLink]="['/components/product-list']">
+            <img src="navbar/search-icon2.svg" class="search-icon" alt="Loupe">
+        </button>
+    </div>
+
     <ul class="nav-links">
         <li class="link">
             <a [routerLink]="['/site']">
