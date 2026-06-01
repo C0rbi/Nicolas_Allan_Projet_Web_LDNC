@@ -12,9 +12,8 @@ public class LdncApplication {
 
 }
 
-// .mvnw clean
-// .mvnw compile
+// .\mvnw clean compile
 
-// ./mvnw spring-boot:run
+// .\mvnw spring-boot:run
 
 // http://localhost:8080

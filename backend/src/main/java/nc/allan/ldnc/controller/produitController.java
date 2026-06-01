@@ -12,7 +12,7 @@ import nc.allan.ldnc.entity.Produit;
 import nc.allan.ldnc.repository.ProduitRepository;
 
 @RestController
-@RequestMapping("/api/produits")
+@RequestMapping("/api/produit")
 @CrossOrigin(origins = "http://localhost:4200") // pour autoriser Angular à accéder à cette API
 public class ProduitController {
     
@@ -20,7 +20,7 @@ public class ProduitController {
     private ProduitRepository repo;
 
     @GetMapping
-    public List<Produit> getProduits() {
+    public List<Produit> getProduit() {
         return repo.findAll();
     }
 }
