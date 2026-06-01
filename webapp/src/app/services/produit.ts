@@ -7,7 +7,7 @@ import { Produit } from '../models/produit.model'; // Vérifie bien le chemin !
   providedIn: 'root'
 })
 export class ProduitService {
-  private apiUrl = 'http://localhost:8080/api/produits';
+  private apiUrl = 'http://localhost:8080/api/produit';
 
   constructor(private http: HttpClient) { }
 
@@ -16,3 +16,5 @@ export class ProduitService {
     return this.http.get<Produit[]>(this.apiUrl);
   }
 }
+
+export { Produit };

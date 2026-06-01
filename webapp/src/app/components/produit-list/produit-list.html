@@ -36,16 +36,16 @@
         
         <div class="product-info">
           <h3>{{ p.nom }}</h3>
-          <p class="description">Carte mère Micro ATX Socket AM4...</p>
+          <p class="description">{{ p.description }}</p>
           <div class="rating">★★★★★ <small>9 avis</small></div>
         </div>
 
         <div class="product-status">
-          <span class="stock-label">EN STOCK</span>
+          <span [style.color]="p.stock > 0 ? 'green' : 'red'">{{ p.stock > 0 ? 'EN STOCK' : 'RUPTURE' }}</span>
         </div>
 
         <div class="product-price-action">
-          <span class="price">{{ p.prix }} €</span>
+          <span class="price">{{ p.prix_ht | number:'1.2-2' }} €</span>
           <button class="buy-btn">🛒</button>
         </div>
       </div>
