@@ -43,8 +43,8 @@ public class SecurityConfig {
                         // Ouvert à tous les visiteurs
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/produits/**", "/api/categories", "/api/marques").permitAll()
-                        // Ajouter, modifier, supprimer un produit : administrateurs seulement
-                        .requestMatchers("/api/produits/**").hasRole("ADMIN")
+                        // Ajouter, modifier, supprimer un produit, voir les statistiques : administrateurs seulement
+                        .requestMatchers("/api/produits/**", "/api/statistiques").hasRole("ADMIN")
                         // Tout le reste (le panier) : il faut être connecté
                         .anyRequest().authenticated())
 

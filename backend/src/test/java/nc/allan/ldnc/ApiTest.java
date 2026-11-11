@@ -101,6 +101,15 @@ class ApiTest {
     }
 
     @Test
+    void lesStatistiques_sontReserveesAuxAdministrateurs() throws Exception {
+        String tokenClient = jwtService.creerToken("client@test.nc", List.of("CLIENT"));
+
+        mockMvc.perform(get("/api/statistiques")).andExpect(status().isUnauthorized());
+        mockMvc.perform(get("/api/statistiques").header("Authorization", "Bearer " + tokenClient))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
     void unVisiteur_nePeutPasVoirDePanier() throws Exception {
         mockMvc.perform(get("/api/panier")).andExpect(status().isUnauthorized());
     }
