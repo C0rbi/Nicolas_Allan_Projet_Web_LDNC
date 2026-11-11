@@ -56,7 +56,11 @@ Le paiement n'est pas proposé : LDNC est un site de démonstration.
 
 Se connecter avec un compte administrateur : le lien **Gestion** apparaît en haut à droite.
 
+- **Stock par catégorie** (en haut de la page) : nombre de produits, produits en rupture (en rouge), articles en
+  stock et valeur du stock HT de chaque catégorie.
 - **Liste** : tous les produits avec leur prix HT, TVA, prix TTC et stock (stock à 0 en rouge).
+- Baisser le stock d'un produit ajuste automatiquement les paniers des clients (quantité ramenée au stock restant,
+  produit retiré s'il est en rupture).
 - **Ajouter** : bouton « + Ajouter un produit », remplir le formulaire, « Enregistrer ».
 - **Modifier** : bouton « Modifier » sur la ligne du produit, changer les champs, « Enregistrer ».
   Le prix TTC est recalculé pendant la saisie.

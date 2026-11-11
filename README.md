@@ -11,7 +11,7 @@ Le site est fictif : aucune vente réelle, pas de paiement.
 |---|---|
 | Visiteur | Parcourir le catalogue, rechercher un produit, filtrer (catégorie, marque, prix maximum), trier, voir une fiche produit |
 | Client | Créer un compte, se connecter, gérer son panier (ajouter, changer la quantité, retirer, vider), voir le total HT / TVA / TTC |
-| Administrateur | Ajouter, modifier et supprimer des produits (prix, TVA, stock, marque, catégorie, image) |
+| Administrateur | Ajouter, modifier et supprimer des produits (prix, TVA, stock, marque, catégorie, image), voir le stock par catégorie |
 
 Le panier est enregistré en base de données : on le retrouve à chaque connexion.
 
@@ -31,17 +31,23 @@ Prérequis : JDK 25, Node.js 24, PostgreSQL (service démarré).
 
 ### 1. Base de données
 
-Créer la base `ldncdb` (une seule fois), puis exécuter les deux scripts **dans l'ordre**.
+Créer la base `ldncdb` (une seule fois), puis exécuter les trois scripts **dans l'ordre**.
 Dans pgAdmin : clic droit sur `ldncdb` > Query Tool > ouvrir le fichier > Exécuter.
 Ou dans un terminal PowerShell, à la racine du projet :
 
 ```powershell
 & "C:\Program Files\PostgreSQL\18\bin\psql.exe" -U postgres -c "CREATE DATABASE ldncdb"
 & "C:\Program Files\PostgreSQL\18\bin\psql.exe" -U postgres -d ldncdb -f database/01_structure.sql
-& "C:\Program Files\PostgreSQL\18\bin\psql.exe" -U postgres -d ldncdb -f database/02_donnees.sql
+& "C:\Program Files\PostgreSQL\18\bin\psql.exe" -U postgres -d ldncdb -f database/02_sql_avance.sql
+& "C:\Program Files\PostgreSQL\18\bin\psql.exe" -U postgres -d ldncdb -f database/03_donnees.sql
 ```
 
-`01_structure.sql` supprime et recrée toutes les tables : il sert aussi à remettre la base à zéro avant une démonstration.
+| Script | Contenu |
+|---|---|
+| `01_structure.sql` | Les 17 tables et leurs contraintes. Il supprime d'abord les tables : il sert aussi à remettre la base à zéro avant une démonstration |
+| `02_sql_avance.sql` | 2 vues, 2 déclencheurs (triggers), 2 procédures stockées |
+| `03_donnees.sql` | Comptes de démonstration, catégories, marques, 15 produits |
+| `04_requetes_utiles.sql` | Requêtes de consultation à lancer à la main (jointures, regroupements, vues) |
 
 ### 2. API Spring Boot (port 8080)
 
@@ -81,7 +87,7 @@ cd backend
 .\mvnw.cmd test
 ```
 
-23 tests : calcul du prix TTC, règles du panier, inscription et connexion (tests unitaires avec Mockito),
+24 tests : calcul du prix TTC, règles du panier, inscription et connexion (tests unitaires avec Mockito),
 droits d'accès, validation et parcours complet du panier (tests d'intégration MockMvc sur une base H2).
 
 ```powershell
@@ -110,7 +116,7 @@ webapp/      site Angular
     models/       interfaces TypeScript (Produit, Panier, Utilisateur)
     ...           un dossier par page (accueil, produit-list, mon-panier, admin-produits...)
   public/       images (logo, carrousel, illustrations des produits)
-database/    scripts SQL (structure, données de démonstration, requêtes utiles)
+database/    scripts SQL (structure, SQL avancé, données de démonstration, requêtes utiles)
 docs/        documentation technique, guide utilisateur, cahier de recette, captures d'écran
 ```
 
@@ -126,3 +132,4 @@ docs/        documentation technique, guide utilisateur, cahier de recette, capt
 |---|---|---|
 | 0.1 | 06/2026 | Maquette Angular (accueil, connexion, liste des produits), début de l'API |
 | 1.0.0 | 11/2026 | Comptes et rôles, recherche et filtres, panier en base, administration des produits, tests, intégration continue |
+| 1.1.0 | 11/2026 | SQL avancé : 2 vues, 2 déclencheurs, 2 procédures stockées ; stock par catégorie dans la page Gestion |

@@ -1,6 +1,6 @@
 # LDNC - Documentation technique
 
-Version 1.0.0 - novembre 2026
+Version 1.1.0 - novembre 2026
 
 ## 1. Contexte et besoin
 
@@ -39,6 +39,7 @@ Dans l'API, chaque couche a un rôle :
 | `controller` | Reçoit la requête HTTP, valide les données (`@Valid`), renvoie la réponse | `ProduitController` |
 | `service` | Applique les règles métier | `PanierService` : quantité ≤ stock |
 | `repository` | Lit et écrit en base, sans écrire de SQL à la main (sauf la recherche en JPQL) | `ProduitRepository` |
+| (JdbcTemplate) | Exécute directement du SQL, ici pour lire une vue sans créer d'entité | `StatistiqueController` |
 | `entity` | Classe Java liée à une table (mapping JPA) | `Produit` ↔ table `produit` |
 | `dto` | Données échangées quand l'entité ne doit pas sortir telle quelle | `UtilisateurDto` (sans mot de passe) |
 | `security` | Spring Security, création et vérification des tokens JWT | `SecurityConfig`, `JwtFiltre` |
@@ -53,7 +54,7 @@ automatiquement.
 | Choix | Pourquoi |
 |---|---|
 | Angular + Spring Boot séparés | Le front et l'API évoluent séparément ; l'API pourrait servir une application mobile |
-| PostgreSQL | SGBD relationnel libre, contraintes d'intégrité (clés étrangères, CHECK), déclencheurs |
+| PostgreSQL | SGBD relationnel libre, contraintes d'intégrité (clés étrangères, CHECK), vues, déclencheurs et procédures stockées en PL/pgSQL |
 | Spring Data JPA (Hibernate) | Pas de SQL répétitif : `findById`, `save`, `delete`... ; requêtes paramétrées (pas d'injection SQL) |
 | Token JWT | API sans session : chaque requête porte son token signé ; pas de cookie, donc pas de risque CSRF |
 | BCrypt | Empreinte lente et salée : deux mots de passe identiques ont des empreintes différentes |
@@ -148,20 +149,29 @@ Points importants :
 - Actions sur suppression : supprimer un produit le retire des paniers (`ON DELETE CASCADE`) ; une marque utilisée
   par un produit ne peut pas être supprimée (`ON DELETE RESTRICT`).
 
-### 4.2 Règles dans le SGBD
+### 4.2 Règles et SQL avancé dans le SGBD
 
 - Contraintes `CHECK` : prix, TVA et stock positifs, quantité > 0, note d'avis entre 1 et 5.
 - Valeurs par défaut : `date_ajout` et `date_creation` = date du jour, `tva` = 20.
-- Déclencheur `trg_verifier_stock_panier` : la base refuse une ligne de panier dont la quantité dépasse le stock,
-  même si elle est ajoutée sans passer par l'API (deuxième sécurité, l'API fait déjà le contrôle).
+- Vues, déclencheurs et procédures stockées (script `02_sql_avance.sql`, en PL/pgSQL) :
+
+| Objet | Rôle | Utilisation |
+|---|---|---|
+| Vue `vue_catalogue` | Produits avec prix TTC calculé, marque, catégorie et état du stock (« En stock », « Stock faible », « Rupture de stock ») | Requêtes de suivi dans pgAdmin (ex. produits à réapprovisionner) |
+| Vue `vue_stock_par_categorie` | Par catégorie : nombre de produits, produits en rupture, articles en stock, valeur du stock HT | Page Gestion du site, via `GET /api/statistiques` (`StatistiqueController` + `JdbcTemplate`) |
+| Déclencheur `trg_verifier_stock_panier` | Refuse une ligne de panier dont la quantité dépasse le stock | Automatique ; deuxième sécurité derrière l'API (même un `INSERT` SQL direct est refusé) |
+| Déclencheur `trg_ajuster_paniers_au_stock` | Quand le stock d'un produit baisse : quantités des paniers ramenées au stock, lignes retirées en cas de rupture | Automatique quand l'administrateur baisse un stock dans la page Gestion |
+| Procédure `reapprovisionner(produit, quantité)` | Ajoute une livraison au stock, refuse une quantité ≤ 0 ou un produit inconnu | `CALL reapprovisionner(4, 10);` dans pgAdmin |
+| Procédure `supprimer_compte(email)` | Droit à l'effacement (RGPD) : supprime le compte, son panier part avec (`ON DELETE CASCADE`) ; refuse un compte administrateur | `CALL supprimer_compte('lea.martin@test.nc');` sur demande d'un client |
 
 ### 4.3 Scripts
 
 | Script | Contenu |
 |---|---|
-| `database/01_structure.sql` | Supprime puis crée les 17 tables, les contraintes et le déclencheur |
-| `database/02_donnees.sql` | Rôles, 2 comptes de démonstration, 10 catégories, 8 marques, 15 produits |
-| `database/03_requetes_utiles.sql` | Requêtes de consultation : catalogue avec jointures, paniers, totaux (GROUP BY), valeur du stock |
+| `database/01_structure.sql` | Supprime puis crée les 17 tables et leurs contraintes |
+| `database/02_sql_avance.sql` | 2 vues, 2 déclencheurs, 2 procédures stockées (peut être relancé sans perte de données) |
+| `database/03_donnees.sql` | Rôles, 2 comptes de démonstration, 10 catégories, 8 marques, 15 produits |
+| `database/04_requetes_utiles.sql` | Requêtes de consultation : jointures, regroupements (GROUP BY), utilisation des vues, exemples d'appel des procédures |
 
 ## 5. Diagramme de classes (entités Java)
 
@@ -254,6 +264,7 @@ Adresse de base : `http://localhost:8080/api`. Les erreurs renvoient `{ "message
 | PUT | `/panier/{produitId}?quantite=2` | connecté | Changer la quantité | 200, 400, 404 |
 | DELETE | `/panier/{produitId}` | connecté | Retirer un produit | 200 |
 | DELETE | `/panier` | connecté | Vider le panier | 200 |
+| GET | `/statistiques` | ADMIN | Stock par catégorie (vue SQL `vue_stock_par_categorie`) | 200, 401, 403 |
 
 Valeurs de `tri` : `prix-croissant`, `prix-decroissant`, `nouveautes` (par défaut : par nom).
 Une catégorie principale (ex. Composants) renvoie aussi les produits de ses sous-catégories.
@@ -323,7 +334,7 @@ appeler l'API directement. Les guards Angular (`guards.ts`) ne servent qu'à red
 | Données invalides | Validation côté serveur (`@NotBlank`, `@Email`, `@Size`, `@PositiveOrZero`) en plus des contrôles du formulaire |
 | Appels depuis un autre site | CORS : seule l'origine du site Angular est autorisée |
 | CSRF | Pas de cookie de session : le token est envoyé dans un en-tête, un autre site ne peut pas le joindre |
-| Incohérence des données | Contraintes de la base (clés étrangères, CHECK, UNIQUE) et déclencheur sur le stock |
+| Incohérence des données | Contraintes de la base (clés étrangères, CHECK, UNIQUE) et déclencheurs sur le stock |
 
 ## 9. Tests
 

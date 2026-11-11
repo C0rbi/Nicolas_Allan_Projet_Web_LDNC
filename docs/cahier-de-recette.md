@@ -1,13 +1,13 @@
 # LDNC - Cahier de recette
 
-Recette réalisée le 11/11/2026 sur la version 1.0.0 : API sur PostgreSQL 18, site dans Chrome.
-Données de départ : scripts `01_structure.sql` et `02_donnees.sql`.
+Recette réalisée le 11/11/2026 sur les versions 1.0.0 et 1.1.0 : API sur PostgreSQL 18, site dans Chrome.
+Données de départ : scripts `01_structure.sql`, `02_sql_avance.sql` et `03_donnees.sql`.
 
 ## 1. Tests automatisés
 
 | Commande | Résultat |
 |---|---|
-| `.\mvnw.cmd test` (dossier `backend`) | 23 tests, 0 échec |
+| `.\mvnw.cmd test` (dossier `backend`) | 24 tests, 0 échec |
 | `npx ng test --watch=false` (dossier `webapp`) | 5 tests, 0 échec |
 | `npx ng build` (dossier `webapp`) | Compilation sans erreur ni avertissement |
 
@@ -47,6 +47,13 @@ Données de départ : scripts `01_structure.sql` et `02_donnees.sql`.
 | R30 | Base de données | Mot de passe d'un compte dans la table `users` | Empreinte BCrypt (`$2a$10$...`), jamais le mot de passe | Conforme |
 | R31 | Base de données | `INSERT` direct d'une ligne de panier au-delà du stock | Refusé par le déclencheur : « Stock insuffisant » | Conforme |
 | R32 | Affichage | Largeur téléphone (390 px) | Recherche sous le logo, filtres au-dessus de la liste | Conforme |
+| R33 | Vue SQL | `SELECT * FROM vue_catalogue WHERE etat_stock <> 'En stock'` | 4 produits : 1 en rupture, 3 en stock faible, prix TTC calculé | Conforme |
+| R34 | Vue SQL + site | Page Gestion, tableau « Stock par catégorie » | 8 catégories, mêmes valeurs que `vue_stock_par_categorie` (ex. Processeurs : 3 produits, 18 270 € HT) | Conforme |
+| R35 | Sécurité API | Client connecté : `GET /api/statistiques` | Réponse 403 (réservé aux administrateurs) | Conforme |
+| R36 | Déclencheur 2 | Panier avec 3 écrans, puis stock de l'écran ramené à 2 | La quantité du panier passe à 2 | Conforme |
+| R37 | Déclencheur 2 | Stock d'un produit du panier ramené à 0 | La ligne est retirée du panier ; une hausse de stock ne change rien | Conforme |
+| R38 | Procédure 1 | `CALL reapprovisionner(4, 10)` puis quantité 0 et produit 999 | Stock de la RTX 4070 à 10 ; les deux appels invalides sont refusés avec un message | Conforme |
+| R39 | Procédure 2 | `CALL supprimer_compte('client@...')` puis compte admin et email inconnu | Compte, panier et lignes supprimés ; admin refusé ; email inconnu signalé | Conforme |
 
 ## 3. Anomalies corrigées pendant la recette
 
