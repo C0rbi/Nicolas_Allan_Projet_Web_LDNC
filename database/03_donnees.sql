@@ -1,6 +1,6 @@
 -- =============================================================================
---  LDNC - Données de démonstration (à exécuter APRÈS 01_structure.sql)
---      psql -U postgres -d ldncdb -f database/02_donnees.sql
+--  LDNC - Données de démonstration (à exécuter APRÈS 01_structure.sql et 02_sql_avance.sql)
+--      psql -U postgres -d ldncdb -f database/03_donnees.sql
 --
 --  Comptes de démonstration :
 --      admin@ldnc.nc   / Admin2026!    (administrateur : gère les produits)

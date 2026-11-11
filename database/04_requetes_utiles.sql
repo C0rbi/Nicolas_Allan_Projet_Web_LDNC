@@ -43,12 +43,17 @@ JOIN users u   ON u.id = pa.user_id
 JOIN produit p ON p.id = lp.produit_id
 GROUP BY u.email;
 
--- 6. Valeur du stock par catégorie (produits en rupture comptés à part)
-SELECT c.nom AS categorie,
-       COUNT(p.id) AS nb_produits,
-       SUM(CASE WHEN p.stock = 0 THEN 1 ELSE 0 END) AS nb_en_rupture,
-       SUM(p.prix_ht * p.stock) AS valeur_stock_ht
-FROM categorie c
-JOIN produit p ON p.categorie_id = c.id
-GROUP BY c.nom
-ORDER BY valeur_stock_ht DESC;
+-- 6. Valeur du stock par catégorie, grâce à la vue (voir 02_sql_avance.sql)
+SELECT * FROM vue_stock_par_categorie ORDER BY valeur_stock_ht DESC;
+
+-- 7. Produits à réapprovisionner, grâce à la vue du catalogue
+SELECT nom, marque, stock, etat_stock
+FROM vue_catalogue
+WHERE etat_stock <> 'En stock'
+ORDER BY stock;
+
+-- -----------------------------------------------------------------------------
+--  Exemples d'appel des procédures stockées (ATTENTION : elles modifient la base)
+-- -----------------------------------------------------------------------------
+-- CALL reapprovisionner(4, 10);                 -- 10 MSI RTX 4070 livrées
+-- CALL supprimer_compte('lea.martin@test.nc');  -- demande d'effacement RGPD

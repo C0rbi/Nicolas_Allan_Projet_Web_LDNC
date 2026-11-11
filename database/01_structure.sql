@@ -1,7 +1,7 @@
 -- =============================================================================
 --  LDNC - Création de la base de données (PostgreSQL)
 --
---  À exécuter sur la base "ldncdb", puis exécuter 02_donnees.sql :
+--  À exécuter sur la base "ldncdb", puis 02_sql_avance.sql et 03_donnees.sql :
 --      psql -U postgres -d ldncdb -f database/01_structure.sql
 --  (ou dans pgAdmin : clic droit sur ldncdb > Query Tool > ouvrir le fichier > Exécuter)
 --
@@ -91,22 +91,6 @@ CREATE TABLE ligne_panier (
     quantite   INTEGER NOT NULL CHECK (quantite > 0),
     PRIMARY KEY (panier_id, produit_id)
 );
-
--- Déclencheur (trigger) : la base refuse elle-même une quantité supérieure au stock,
--- même si une ligne est ajoutée sans passer par l'application (ex. requête SQL directe).
--- L'API fait déjà ce contrôle ; la base est une deuxième sécurité.
-CREATE OR REPLACE FUNCTION verifier_stock_panier() RETURNS TRIGGER AS $$
-BEGIN
-    IF NEW.quantite > (SELECT stock FROM produit WHERE id = NEW.produit_id) THEN
-        RAISE EXCEPTION 'Stock insuffisant pour le produit %', NEW.produit_id;
-    END IF;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER trg_verifier_stock_panier
-    BEFORE INSERT OR UPDATE ON ligne_panier
-    FOR EACH ROW EXECUTE FUNCTION verifier_stock_panier();
 
 
 -- -----------------------------------------------------------------------------
