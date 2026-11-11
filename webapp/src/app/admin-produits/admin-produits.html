@@ -11,6 +11,34 @@
     <p class="message-erreur">{{ erreur() }}</p>
   }
 
+  <!-- Calculé par la vue SQL vue_stock_par_categorie -->
+  <h2 class="sous-titre">Stock par catégorie</h2>
+  <div class="tableau-defilant statistiques">
+    <table>
+      <thead>
+        <tr>
+          <th>Catégorie</th>
+          <th>Produits</th>
+          <th>En rupture</th>
+          <th>Articles en stock</th>
+          <th>Valeur du stock HT</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (ligne of statistiques(); track ligne.categorie) {
+          <tr>
+            <td>{{ ligne.categorie }}</td>
+            <td class="nombre">{{ ligne.nb_produits }}</td>
+            <td class="nombre" [class.rupture]="ligne.nb_en_rupture > 0">{{ ligne.nb_en_rupture }}</td>
+            <td class="nombre">{{ ligne.nb_articles }}</td>
+            <td class="nombre">{{ ligne.valeur_stock_ht | currency: 'EUR' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="sous-titre">Produits</h2>
   <div class="tableau-defilant">
     <table>
       <thead>

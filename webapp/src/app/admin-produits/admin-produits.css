@@ -9,6 +9,17 @@
   overflow-x: auto;
 }
 
+.sous-titre {
+  margin: 20px 0 10px;
+  color: var(--vert);
+  font-size: 1.1rem;
+  text-transform: uppercase;
+}
+
+.statistiques {
+  max-width: 760px;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;

@@ -11,6 +11,15 @@ export interface Categorie {
   parentId: number | null; // null pour une catégorie principale (ex. Composants)
 }
 
+// Une ligne de la vue SQL vue_stock_par_categorie (mêmes noms que les colonnes de la vue)
+export interface StockCategorie {
+  categorie: string;
+  nb_produits: number;
+  nb_en_rupture: number;
+  nb_articles: number;
+  valeur_stock_ht: number;
+}
+
 export interface Produit {
   id?: number; // absent tant que le produit n'est pas enregistré
   nom: string;

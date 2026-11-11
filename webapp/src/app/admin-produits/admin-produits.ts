@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { Produit } from '../models/produit.model';
+import { Produit, StockCategorie } from '../models/produit.model';
 import { ProduitService } from '../services/produit';
 
 /** Administration : liste des produits avec les boutons Modifier et Supprimer. */
@@ -15,6 +15,7 @@ export class AdminProduits {
   private produitService = inject(ProduitService);
 
   produits = signal<Produit[]>([]);
+  statistiques = signal<StockCategorie[]>([]);
   message = signal('');
   erreur = signal('');
 
@@ -24,6 +25,7 @@ export class AdminProduits {
 
   charger(): void {
     this.produitService.rechercher().subscribe((produits) => this.produits.set(produits));
+    this.produitService.getStatistiques().subscribe((lignes) => this.statistiques.set(lignes));
   }
 
   supprimer(produit: Produit): void {

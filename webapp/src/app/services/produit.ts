@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API_URL } from '../config';
-import { Categorie, Marque, Produit } from '../models/produit.model';
+import { Categorie, Marque, Produit, StockCategorie } from '../models/produit.model';
 
 // Critères de recherche (tous facultatifs)
 export interface FiltresProduits {
@@ -65,5 +65,10 @@ export class ProduitService {
 
   supprimer(id: number): Observable<void> {
     return this.http.delete<void>(`${this.url}/${id}`);
+  }
+
+  /** Stock par catégorie, calculé par la vue SQL vue_stock_par_categorie */
+  getStatistiques(): Observable<StockCategorie[]> {
+    return this.http.get<StockCategorie[]>(`${API_URL}/statistiques`);
   }
 }
