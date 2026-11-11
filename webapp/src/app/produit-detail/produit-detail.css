@@ -1,0 +1,68 @@
+.fil-ariane {
+  margin: 20px 0 14px;
+  color: var(--texte-gris);
+  font-size: 0.85rem;
+}
+
+.fil-ariane a {
+  color: var(--texte-gris);
+}
+
+.fiche {
+  display: flex;
+  align-items: flex-start;
+  gap: 30px;
+}
+
+.image {
+  width: 380px;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+}
+
+.infos {
+  flex: 1;
+}
+
+.infos h1 {
+  font-size: 1.5rem;
+}
+
+.marque {
+  color: var(--texte-gris);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.description {
+  line-height: 1.5;
+}
+
+.encadre-achat {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 260px;
+  padding: 18px;
+  border-radius: var(--arrondi);
+  background-color: var(--vert-clair);
+}
+
+.encadre-achat .prix {
+  font-size: 2rem;
+}
+
+.encadre-achat label {
+  margin-bottom: 0;
+}
+
+@media (max-width: 900px) {
+  .fiche {
+    flex-direction: column;
+  }
+
+  .image,
+  .encadre-achat {
+    width: 100%;
+  }
+}

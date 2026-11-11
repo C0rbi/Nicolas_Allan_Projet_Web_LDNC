@@ -1,0 +1,157 @@
+.page-liste {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+/* --- Filtres ----------------------------------------------------------- */
+
+.filtres {
+  flex-shrink: 0;
+  width: 250px;
+  padding: 18px;
+  border-radius: var(--arrondi);
+  background-color: var(--vert-clair);
+}
+
+.filtres h2 {
+  color: var(--vert);
+  font-size: 1rem;
+  text-transform: uppercase;
+}
+
+.filtres .bouton {
+  width: 100%;
+  margin-top: 18px;
+}
+
+.filtres .bouton-lien {
+  display: block;
+  margin: 12px auto 0;
+}
+
+/* --- Résultats --------------------------------------------------------- */
+
+.resultats {
+  flex: 1;
+  min-width: 0;
+}
+
+.barre-resultats {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+  padding: 10px 16px;
+  border-radius: var(--arrondi);
+  background-color: var(--blanc);
+}
+
+.tri {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-weight: normal;
+}
+
+.tri select {
+  width: auto;
+}
+
+.ligne-produit {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 16px;
+  border-bottom: 1px solid var(--bordure);
+  background-color: var(--blanc);
+}
+
+.ligne-produit .image img {
+  display: block;
+  width: 130px;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+}
+
+.infos {
+  flex: 2;
+}
+
+.nom {
+  color: var(--texte);
+  font-size: 1.05rem;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.nom:hover {
+  color: var(--vert);
+  text-decoration: underline;
+}
+
+.description {
+  margin: 6px 0;
+  color: var(--texte-gris);
+  font-size: 0.85rem;
+}
+
+.marque {
+  color: var(--texte-gris);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+.disponibilite {
+  flex: 1;
+  text-align: center;
+}
+
+.achat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  min-width: 170px;
+}
+
+.retour-succes {
+  color: var(--vert-stock);
+  font-size: 0.85rem;
+}
+
+.retour-erreur {
+  color: var(--rouge);
+  font-size: 0.85rem;
+  text-align: right;
+}
+
+.aucun-resultat {
+  padding: 30px;
+  background-color: var(--blanc);
+  text-align: center;
+}
+
+/* --- Petits écrans : les filtres passent au-dessus de la liste ---------- */
+
+@media (max-width: 800px) {
+  .page-liste,
+  .ligne-produit {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filtres {
+    width: auto;
+  }
+
+  .disponibilite {
+    text-align: left;
+  }
+
+  .achat {
+    align-items: flex-start;
+  }
+}

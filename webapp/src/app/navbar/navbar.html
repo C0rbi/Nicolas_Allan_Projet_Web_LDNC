@@ -1,35 +1,44 @@
-<nav class="navbar">
-    <div class="logo">
-        <a [routerLink]="['/']">
-            <img src="navbar/logo.png" alt="Logo de LDNC">
+<header class="entete">
+  <div class="bandeau conteneur">
+    <a routerLink="/" class="logo">
+      <img src="navbar/logo.png" alt="LDNC, retour à l'accueil">
+    </a>
+
+    <form class="recherche" (ngSubmit)="rechercher()">
+      <input type="search" name="recherche" [(ngModel)]="texteRecherche"
+             placeholder="Chercher un produit, une marque, une catégorie..." aria-label="Rechercher un produit">
+      <button type="submit" aria-label="Lancer la recherche">
+        <img src="navbar/search-icon2.svg" alt="">
+      </button>
+    </form>
+
+    <nav class="liens">
+      @if (auth.estAdmin()) {
+        <a routerLink="/admin" routerLinkActive="actif">
+          <img src="navbar/admin-icon.svg" alt="">
+          <span>Gestion</span>
         </a>
-    </div>
+      }
+      <a routerLink="/compte" routerLinkActive="actif">
+        <img src="navbar/compte-icon.svg" alt="">
+        <span>{{ auth.utilisateur()?.prenom ?? 'Compte' }}</span>
+      </a>
+      <a routerLink="/panier" routerLinkActive="actif" class="lien-panier">
+        <img src="navbar/panier-icon.svg" alt="">
+        @if (panierService.nombreArticles() > 0) {
+          <span class="pastille">{{ panierService.nombreArticles() }}</span>
+        }
+        <span>Panier</span>
+      </a>
+    </nav>
+  </div>
 
-    <div class="search-container">
-        <input type="text" class="search-input" placeholder="Chercher un produit, une marque, une catégorie...">
-        <button class="search-button" [routerLink]="['/components/product-list']">
-            <img src="navbar/search-icon2.svg" class="search-icon" alt="Loupe">
-        </button>
+  <nav class="menu">
+    <div class="conteneur">
+      <a routerLink="/produits">Tous les produits</a>
+      @for (categorie of categoriesMenu(); track categorie.id) {
+        <a routerLink="/produits" [queryParams]="{ categorie: categorie.id }">{{ categorie.nom }}</a>
+      }
     </div>
-
-    <ul class="nav-links">
-        <li class="link">
-            <a [routerLink]="['/site']">
-                <img src="navbar/site-icon.svg" alt="">
-                <span>Site</span>
-            </a>
-        </li>
-        <li class="link">
-            <a [routerLink]="['/compte']">
-                <img src="navbar/compte-icon.svg" alt="Compte">
-                <span>Compte</span>
-            </a>
-        </li>
-        <li class="link">
-            <a [routerLink]="['/panier']">
-                <img src="navbar/panier-icon.svg" alt="Panier">
-                <span>Panier</span>
-            </a>
-        </li>
-    </ul>
-</nav>
+  </nav>
+</header>

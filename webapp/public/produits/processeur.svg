@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <rect width="400" height="300" fill="#f3f6f3"/>
+  <g fill="#b6beb6">
+    <rect x="130" y="50" width="8" height="22"/><rect x="152" y="50" width="8" height="22"/><rect x="174" y="50" width="8" height="22"/><rect x="196" y="50" width="8" height="22"/><rect x="218" y="50" width="8" height="22"/><rect x="240" y="50" width="8" height="22"/><rect x="262" y="50" width="8" height="22"/>
+    <rect x="130" y="228" width="8" height="22"/><rect x="152" y="228" width="8" height="22"/><rect x="174" y="228" width="8" height="22"/><rect x="196" y="228" width="8" height="22"/><rect x="218" y="228" width="8" height="22"/><rect x="240" y="228" width="8" height="22"/><rect x="262" y="228" width="8" height="22"/>
+    <rect x="100" y="80" width="22" height="8"/><rect x="100" y="102" width="22" height="8"/><rect x="100" y="124" width="22" height="8"/><rect x="100" y="146" width="22" height="8"/><rect x="100" y="168" width="22" height="8"/><rect x="100" y="190" width="22" height="8"/><rect x="100" y="212" width="22" height="8"/>
+    <rect x="278" y="80" width="22" height="8"/><rect x="278" y="102" width="22" height="8"/><rect x="278" y="124" width="22" height="8"/><rect x="278" y="146" width="22" height="8"/><rect x="278" y="168" width="22" height="8"/><rect x="278" y="190" width="22" height="8"/><rect x="278" y="212" width="22" height="8"/>
+  </g>
+  <rect x="118" y="68" width="164" height="164" rx="12" fill="#2f3a2f"/>
+  <rect x="146" y="96" width="108" height="108" rx="8" fill="#a5afa5"/>
+  <rect x="146" y="96" width="108" height="10" rx="4" fill="#32c800"/>
+  <text x="200" y="166" font-family="Arial, sans-serif" font-size="26" font-weight="bold" fill="#1e501e" text-anchor="middle">CPU</text>
+</svg>

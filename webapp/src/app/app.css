@@ -1,0 +1,27 @@
+/* La page prend toute la hauteur de l'écran : le pied de page reste en bas */
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.contenu {
+  flex: 1;
+  padding-bottom: 40px;
+}
+
+.pied-de-page {
+  padding: 24px 16px;
+  background-color: var(--vert);
+  color: var(--blanc);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.pied-de-page p {
+  margin: 0 0 8px;
+}
+
+.pied-de-page a {
+  color: var(--blanc);
+}

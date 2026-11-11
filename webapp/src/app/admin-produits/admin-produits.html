@@ -1,0 +1,49 @@
+<div class="conteneur">
+  <div class="entete-admin">
+    <h1 class="titre-page">Gestion des produits</h1>
+    <a routerLink="/admin/produits/nouveau" class="bouton">+ Ajouter un produit</a>
+  </div>
+
+  @if (message()) {
+    <p class="message-succes">{{ message() }}</p>
+  }
+  @if (erreur()) {
+    <p class="message-erreur">{{ erreur() }}</p>
+  }
+
+  <div class="tableau-defilant">
+    <table>
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Nom</th>
+          <th>Marque</th>
+          <th>Catégorie</th>
+          <th>Prix HT</th>
+          <th>TVA</th>
+          <th>Prix TTC</th>
+          <th>Stock</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (produit of produits(); track produit.id) {
+          <tr>
+            <td><img [src]="produit.imageUrl || 'produits/aucune-image.svg'" [alt]="produit.nom"></td>
+            <td><a [routerLink]="['/produits', produit.id]">{{ produit.nom }}</a></td>
+            <td>{{ produit.marque?.nom }}</td>
+            <td>{{ produit.categorie?.nom }}</td>
+            <td class="nombre">{{ produit.prixHt | currency: 'EUR' }}</td>
+            <td class="nombre">{{ produit.tva }} %</td>
+            <td class="nombre">{{ produit.prixTtc | currency: 'EUR' }}</td>
+            <td class="nombre" [class.rupture]="produit.stock === 0">{{ produit.stock }}</td>
+            <td class="actions">
+              <a [routerLink]="['/admin/produits', produit.id]" class="bouton bouton-petit">Modifier</a>
+              <button class="bouton bouton-petit bouton-danger" (click)="supprimer(produit)">Supprimer</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

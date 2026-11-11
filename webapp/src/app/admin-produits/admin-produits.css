@@ -1,0 +1,57 @@
+.entete-admin {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.tableau-defilant {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--blanc);
+}
+
+th {
+  padding: 10px;
+  background-color: var(--vert);
+  color: var(--blanc);
+  font-size: 0.85rem;
+  text-align: left;
+}
+
+td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--bordure);
+  font-size: 0.9rem;
+}
+
+tr:hover td {
+  background-color: var(--vert-clair);
+}
+
+td img {
+  display: block;
+  width: 60px;
+}
+
+/* Prix, TVA et stock restent sur une seule ligne */
+.nombre {
+  white-space: nowrap;
+}
+
+.rupture {
+  color: var(--rouge);
+  font-weight: bold;
+}
+
+.actions {
+  white-space: nowrap;
+}
+
+.actions .bouton {
+  margin-right: 6px;
+}
