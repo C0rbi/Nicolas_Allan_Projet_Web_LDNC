@@ -1,0 +1,43 @@
+# Intégration continue : à chaque push sur main ou dev (et à chaque pull request),
+# GitHub compile le projet et lance tous les tests automatiquement.
+# Résultat visible dans l'onglet "Actions" du dépôt GitHub.
+name: CI
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+
+jobs:
+  backend:
+    name: API Spring Boot (tests JUnit)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+      # Les tests utilisent une base H2 en mémoire : pas besoin de PostgreSQL
+      - run: sh mvnw -B test
+
+  frontend:
+    name: Site Angular (compilation + tests Vitest)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: webapp
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: webapp/package-lock.json
+      - run: npm ci
+      - run: npx ng build
+      - run: npx ng test --watch=false

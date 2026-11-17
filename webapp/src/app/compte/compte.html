@@ -1,32 +1,47 @@
-<div class="page-background">
-  <h1>IDENTIFIEZ-VOUS :</h1>
+<div class="page-compte">
+  @if (auth.utilisateur(); as utilisateur) {
+    <!-- Utilisateur connecté -->
+    <h1>MON COMPTE</h1>
+    <div class="compte-container">
+      <h2>Bonjour {{ utilisateur.prenom }} {{ utilisateur.nom }}</h2>
+      <p>{{ utilisateur.email }}</p>
+      <p class="role">Compte {{ auth.estAdmin() ? 'administrateur' : 'client' }}</p>
 
-  <div class="compte-container">
-    <!--Deja client-->
-    <div class="section-haute">
-      <h2>DEJA CLIENT ?</h2>
-      
-      <form class="compte-form">
-        <input type="email" placeholder="Votre email" required>
-        <input type="password" placeholder="Votre mot de passe" required>
-        
-        <a href="#" class="forgot-password">Vous avez oublié votre mot de passe ?</a>
-        
-        <button type="submit" class="btn-green">CONNEXION</button>
-        
-        <div class="checkbox-group">
-          <input type="checkbox" id="stay">
-          <label for="stay">Rester connecté</label>
-        </div>
+      <div class="actions">
+        <a routerLink="/panier" class="bouton">Voir mon panier</a>
+        @if (auth.estAdmin()) {
+          <a routerLink="/admin" class="bouton">Gérer les produits</a>
+        }
+        <button class="bouton bouton-secondaire" (click)="deconnexion()">Se déconnecter</button>
+      </div>
+    </div>
+  } @else {
+    <!-- Visiteur : connexion ou création de compte -->
+    <h1>IDENTIFIEZ-VOUS</h1>
+    <div class="compte-container">
+      <h2>DÉJÀ CLIENT ?</h2>
+
+      @if (sessionExpiree) {
+        <p class="message-info">Votre session a expiré : merci de vous reconnecter.</p>
+      }
+
+      <form class="compte-form" #formulaire="ngForm" (ngSubmit)="connexion()">
+        <input type="email" name="email" [(ngModel)]="email" placeholder="Votre email" required autocomplete="email"
+               aria-label="Email">
+        <input type="password" name="motDePasse" [(ngModel)]="motDePasse" placeholder="Votre mot de passe" required
+               autocomplete="current-password" aria-label="Mot de passe">
+
+        @if (erreur()) {
+          <p class="message-erreur">{{ erreur() }}</p>
+        }
+
+        <button type="submit" class="bouton" [disabled]="formulaire.invalid || envoiEnCours()">CONNEXION</button>
       </form>
-    </div>
 
-    <hr class="separator">
+      <hr class="separateur">
 
-    <!--Nouveau client-->
-    <div class="section-basse">
-      <p>NOUVEAU CLIENT ?</p>
-      <button [routerLink]="['/compte-creation']" class="btn-green">CREEZ UN COMPTE</button>
+      <p class="nouveau-client">NOUVEAU CLIENT ?</p>
+      <a routerLink="/compte-creation" class="bouton bouton-secondaire">CRÉER UN COMPTE</a>
     </div>
-  </div>
+  }
 </div>

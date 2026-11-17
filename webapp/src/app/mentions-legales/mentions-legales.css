@@ -1,0 +1,18 @@
+.carte {
+  max-width: 850px;
+  line-height: 1.6;
+}
+
+h2 {
+  margin-top: 1.2em;
+  color: var(--vert);
+  font-size: 1.1rem;
+}
+
+h2:first-child {
+  margin-top: 0;
+}
+
+li {
+  margin-bottom: 6px;
+}

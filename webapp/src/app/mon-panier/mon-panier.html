@@ -1,0 +1,55 @@
+<div class="conteneur">
+  <h1 class="titre-page">Mon panier</h1>
+
+  @if (panierService.panier(); as panier) {
+    @if (panier.lignes.length === 0) {
+      <div class="carte panier-vide">
+        <p>Votre panier est vide.</p>
+        <a routerLink="/produits" class="bouton">Découvrir nos produits</a>
+      </div>
+    } @else {
+      @if (erreur()) {
+        <p class="message-erreur">{{ erreur() }}</p>
+      }
+
+      <div class="page-panier">
+        <!-- Contenu du panier -->
+        <section class="lignes">
+          @for (ligne of panier.lignes; track ligne.produit.id) {
+            <article class="ligne">
+              <img [src]="ligne.produit.imageUrl || 'produits/aucune-image.svg'" [alt]="ligne.produit.nom">
+
+              <div class="infos">
+                <a [routerLink]="['/produits', ligne.produit.id]" class="nom">{{ ligne.produit.nom }}</a>
+                <span class="prix-unitaire">{{ ligne.produit.prixTtc | currency: 'EUR' }} l'unité</span>
+              </div>
+
+              <div class="quantite">
+                <button (click)="changerQuantite(ligne, ligne.quantite - 1)" [disabled]="ligne.quantite <= 1"
+                        aria-label="Retirer un exemplaire">−</button>
+                <span>{{ ligne.quantite }}</span>
+                <button (click)="changerQuantite(ligne, ligne.quantite + 1)"
+                        [disabled]="ligne.quantite >= ligne.produit.stock" aria-label="Ajouter un exemplaire">+</button>
+              </div>
+
+              <span class="sous-total">{{ ligne.sousTotalTtc | currency: 'EUR' }}</span>
+
+              <button class="bouton-lien" (click)="retirer(ligne)">Retirer</button>
+            </article>
+          }
+          <button class="bouton-lien vider" (click)="vider()">Vider le panier</button>
+        </section>
+
+        <!-- Récapitulatif -->
+        <aside class="recapitulatif carte">
+          <h2>Récapitulatif</h2>
+          <p class="ligne-recap"><span>Articles</span> <span>{{ panier.nombreArticles }}</span></p>
+          <p class="ligne-recap"><span>Total HT</span> <span>{{ panier.totalHt | currency: 'EUR' }}</span></p>
+          <p class="ligne-recap"><span>TVA</span> <span>{{ panier.totalTtc - panier.totalHt | currency: 'EUR' }}</span></p>
+          <p class="ligne-recap total"><span>Total TTC</span> <span class="prix">{{ panier.totalTtc | currency: 'EUR' }}</span></p>
+          <p class="aide">Site de démonstration : le paiement en ligne n'est pas proposé.</p>
+        </aside>
+      </div>
+    }
+  }
+</div>

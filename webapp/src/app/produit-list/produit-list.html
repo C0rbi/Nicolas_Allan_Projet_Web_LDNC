@@ -1,0 +1,96 @@
+<div class="conteneur">
+  <h1 class="titre-page">{{ nomCategorie() }}</h1>
+
+  <div class="page-liste">
+    <!-- Filtres -->
+    <aside class="filtres">
+      <h2>Filtrer les produits</h2>
+      <form (ngSubmit)="appliquerFiltres()">
+        <label for="recherche">Rechercher</label>
+        <input id="recherche" name="recherche" type="search" [(ngModel)]="filtres.recherche"
+               placeholder="Nom, modèle, description...">
+
+        <label for="categorie">Catégorie</label>
+        <select id="categorie" name="categorie" [(ngModel)]="filtres.categorieId" (ngModelChange)="appliquerFiltres()">
+          <option [ngValue]="null">Toutes les catégories</option>
+          @for (categorie of categories(); track categorie.id) {
+            <!-- Les sous-catégories sont décalées sous leur catégorie principale -->
+            <option [ngValue]="categorie.id">{{ categorie.parentId ? '— ' + categorie.nom : categorie.nom }}</option>
+          }
+        </select>
+
+        <label for="marque">Marque</label>
+        <select id="marque" name="marque" [(ngModel)]="filtres.marqueId" (ngModelChange)="appliquerFiltres()">
+          <option [ngValue]="null">Toutes les marques</option>
+          @for (marque of marques(); track marque.id) {
+            <option [ngValue]="marque.id">{{ marque.nom }}</option>
+          }
+        </select>
+
+        <label for="prixMax">Prix maximum (€ TTC)</label>
+        <input id="prixMax" name="prixMax" type="number" min="0" step="10" [(ngModel)]="filtres.prixMax"
+               placeholder="Ex. 300">
+
+        <button type="submit" class="bouton">Appliquer</button>
+        <button type="button" class="bouton-lien" (click)="reinitialiser()">Réinitialiser les filtres</button>
+      </form>
+    </aside>
+
+    <!-- Résultats -->
+    <section class="resultats">
+      <div class="barre-resultats">
+        <span>
+          <strong>{{ produits().length }}</strong> produit(s)
+          @if (filtres.recherche) {
+            pour « {{ filtres.recherche }} »
+          }
+        </span>
+        <label class="tri">
+          Trier par
+          <select name="tri" [(ngModel)]="filtres.tri" (ngModelChange)="appliquerFiltres()">
+            <option value="">Nom</option>
+            <option value="prix-croissant">Prix croissant</option>
+            <option value="prix-decroissant">Prix décroissant</option>
+            <option value="nouveautes">Nouveautés</option>
+          </select>
+        </label>
+      </div>
+
+      @if (erreur()) {
+        <p class="message-erreur">{{ erreur() }}</p>
+      }
+
+      @for (produit of produits(); track produit.id) {
+        <article class="ligne-produit">
+          <a class="image" [routerLink]="['/produits', produit.id]">
+            <img [src]="produit.imageUrl || 'produits/aucune-image.svg'" [alt]="produit.nom">
+          </a>
+
+          <div class="infos">
+            <a class="nom" [routerLink]="['/produits', produit.id]">{{ produit.nom }}</a>
+            <p class="description">{{ produit.description }}</p>
+            <span class="marque">{{ produit.marque?.nom }}</span>
+          </div>
+
+          <div class="disponibilite">
+            <app-stock [stock]="produit.stock" />
+          </div>
+
+          <div class="achat">
+            <span class="prix">{{ produit.prixTtc | currency: 'EUR' }}</span>
+            <button class="bouton bouton-petit" [disabled]="produit.stock === 0" (click)="ajouterAuPanier(produit)">
+              Ajouter au panier
+            </button>
+            @if (retour()?.produitId === produit.id) {
+              <span [class]="retour()!.estErreur ? 'retour-erreur' : 'retour-succes'">{{ retour()!.texte }}</span>
+            }
+          </div>
+        </article>
+      } @empty {
+        @if (!chargement() && !erreur()) {
+          <p class="aucun-resultat">Aucun produit ne correspond à votre recherche.</p>
+        }
+      }
+    </section>
+  </div>
+</div>

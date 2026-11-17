@@ -1,3 +1,208 @@
-/* You can add global styles to this file, and also import other style files */
+/* =============================================================================
+   LDNC - Styles communs à tout le site
+   Les couleurs sont des variables : changer --vert suffit pour changer
+   la couleur principale de tout le site (bandeau, boutons, prix...).
+   ============================================================================= */
 
-@import "tailwindcss";
+:root {
+  --vert: #1e501e;          /* couleur principale (même vert que le logo) */
+  --vert-fonce: #143814;    /* survol des boutons */
+  --vert-clair: #e8f3e8;    /* fonds légers : filtres, encadrés */
+  --vert-vif: #32c800;      /* vert des lettres "NC" du logo : pastille du panier */
+  --texte: #222222;
+  --texte-gris: #666666;
+  --bordure: #dddddd;
+  --fond: #f2f2f2;          /* fond des pages */
+  --blanc: #ffffff;
+  --rouge: #c62828;         /* erreurs, rupture de stock */
+  --orange: #c25e00;        /* stock faible */
+  --vert-stock: #1b7a36;    /* "En stock" */
+  --arrondi: 6px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  color: var(--texte);
+  background-color: var(--fond);
+}
+
+h1, h2, h3 {
+  margin: 0 0 0.6em;
+}
+
+a {
+  color: var(--vert);
+}
+
+img {
+  max-width: 100%;
+}
+
+/* --- Mise en page ------------------------------------------------------- */
+
+.conteneur {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.titre-page {
+  margin: 24px 0 16px;
+  font-size: 1.5rem;
+  text-transform: uppercase;
+}
+
+.carte {
+  background-color: var(--blanc);
+  border: 1px solid var(--bordure);
+  border-radius: var(--arrondi);
+  padding: 20px;
+}
+
+/* --- Boutons ------------------------------------------------------------ */
+
+.bouton {
+  display: inline-block;
+  padding: 10px 24px;
+  border: 2px solid var(--vert);
+  border-radius: 25px;
+  background-color: var(--vert);
+  color: var(--blanc);
+  font: bold 0.95rem Arial, Helvetica, sans-serif;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.bouton:hover {
+  background-color: var(--vert-fonce);
+  border-color: var(--vert-fonce);
+}
+
+.bouton:disabled {
+  background-color: #9e9e9e;
+  border-color: #9e9e9e;
+  cursor: not-allowed;
+}
+
+.bouton-secondaire {
+  background-color: var(--blanc);
+  color: var(--vert);
+}
+
+.bouton-secondaire:hover {
+  background-color: var(--vert-clair);
+  border-color: var(--vert);
+}
+
+.bouton-danger {
+  background-color: var(--rouge);
+  border-color: var(--rouge);
+}
+
+.bouton-danger:hover {
+  background-color: #8e1c1c;
+  border-color: #8e1c1c;
+}
+
+.bouton-petit {
+  padding: 6px 14px;
+  font-size: 0.85rem;
+}
+
+.bouton-lien {
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--vert);
+  font-size: 0.9rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* --- Formulaires -------------------------------------------------------- */
+
+label {
+  display: block;
+  margin: 14px 0 5px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 9px 10px;
+  border: 1px solid var(--bordure);
+  border-radius: 4px;
+  background-color: var(--blanc);
+  font: inherit;
+}
+
+input[type="checkbox"] {
+  width: auto;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: 2px solid var(--vert);
+  outline-offset: -1px;
+}
+
+/* Champ invalide après que l'utilisateur l'a quitté (classes ajoutées par Angular) */
+input.ng-touched.ng-invalid {
+  border-color: var(--rouge);
+}
+
+.aide {
+  margin: 4px 0 0;
+  color: var(--texte-gris);
+  font-size: 0.8rem;
+}
+
+.erreur-champ {
+  margin: 4px 0 0;
+  color: var(--rouge);
+  font-size: 0.8rem;
+}
+
+/* --- Messages ----------------------------------------------------------- */
+
+.message-erreur, .message-succes, .message-info {
+  margin: 12px 0;
+  padding: 10px 14px;
+  border-radius: 4px;
+}
+
+.message-erreur {
+  background-color: #fdecea;
+  color: var(--rouge);
+}
+
+.message-succes {
+  background-color: #e6f4ea;
+  color: var(--vert-stock);
+}
+
+.message-info {
+  background-color: var(--vert-clair);
+  color: var(--vert);
+}
+
+/* --- Prix --------------------------------------------------------------- */
+
+.prix {
+  color: var(--vert);
+  font-size: 1.5rem;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.prix-ht {
+  color: var(--texte-gris);
+  font-size: 0.8rem;
+}

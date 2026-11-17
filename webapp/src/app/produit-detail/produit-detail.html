@@ -1,0 +1,48 @@
+<div class="conteneur">
+  @if (produit(); as produit) {
+    <!-- Fil d'Ariane -->
+    <nav class="fil-ariane">
+      <a routerLink="/">Accueil</a> ›
+      <a routerLink="/produits">Produits</a> ›
+      @if (produit.categorie) {
+        <a routerLink="/produits" [queryParams]="{ categorie: produit.categorie.id }">{{ produit.categorie.nom }}</a> ›
+      }
+      <span>{{ produit.nom }}</span>
+    </nav>
+
+    <div class="fiche carte">
+      <img class="image" [src]="produit.imageUrl || 'produits/aucune-image.svg'" [alt]="produit.nom">
+
+      <div class="infos">
+        <span class="marque">{{ produit.marque?.nom }}</span>
+        <h1>{{ produit.nom }}</h1>
+        <p class="description">{{ produit.description }}</p>
+      </div>
+
+      <div class="encadre-achat">
+        <span class="prix">{{ produit.prixTtc | currency: 'EUR' }}</span>
+        <span class="prix-ht">{{ produit.prixHt | currency: 'EUR' }} HT (TVA {{ produit.tva }} %)</span>
+        <app-stock [stock]="produit.stock" />
+
+        @if (produit.stock > 0) {
+          <label for="quantite">Quantité</label>
+          <select id="quantite" name="quantite" [(ngModel)]="quantite">
+            @for (nombre of quantitesPossibles(); track nombre) {
+              <option [ngValue]="nombre">{{ nombre }}</option>
+            }
+          </select>
+          <button class="bouton" (click)="ajouterAuPanier()">Ajouter au panier</button>
+        }
+
+        @if (message()) {
+          <p class="message-succes">{{ message() }} <a routerLink="/panier">Voir mon panier</a></p>
+        }
+        @if (erreur()) {
+          <p class="message-erreur">{{ erreur() }}</p>
+        }
+      </div>
+    </div>
+  } @else if (erreur()) {
+    <p class="message-erreur">{{ erreur() }} <a routerLink="/produits">Retour aux produits</a></p>
+  }
+</div>

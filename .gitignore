@@ -1,0 +1,6 @@
+# Fichiers propres à chaque poste (IntelliJ, VS Code) à la racine du dépôt
+/.idea/
+/.vscode/
+
+# Notes personnelles pour l'oral : ne pas publier sur GitHub
+PREPARATION-ORAL-E6.md

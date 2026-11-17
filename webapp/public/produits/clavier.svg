@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <defs>
+    <pattern id="touches" x="40" y="104" width="26" height="26" patternUnits="userSpaceOnUse">
+      <rect x="2" y="2" width="22" height="22" rx="3" fill="#6b766b"/>
+    </pattern>
+  </defs>
+  <rect width="400" height="300" fill="#f3f6f3"/>
+  <rect x="28" y="92" width="344" height="134" rx="12" fill="#2f3a2f"/>
+  <rect x="40" y="104" width="312" height="78" fill="url(#touches)"/>
+  <rect x="42" y="184" width="48" height="22" rx="3" fill="#6b766b"/>
+  <rect x="96" y="184" width="196" height="22" rx="3" fill="#a5afa5"/>
+  <rect x="298" y="184" width="52" height="22" rx="3" fill="#6b766b"/>
+  <rect x="28" y="92" width="344" height="6" rx="3" fill="#32c800"/>
+</svg>

@@ -1,0 +1,77 @@
+<div class="conteneur">
+  <div class="entete-admin">
+    <h1 class="titre-page">Gestion des produits</h1>
+    <a routerLink="/admin/produits/nouveau" class="bouton">+ Ajouter un produit</a>
+  </div>
+
+  @if (message()) {
+    <p class="message-succes">{{ message() }}</p>
+  }
+  @if (erreur()) {
+    <p class="message-erreur">{{ erreur() }}</p>
+  }
+
+  <!-- Calculé par la vue SQL vue_stock_par_categorie -->
+  <h2 class="sous-titre">Stock par catégorie</h2>
+  <div class="tableau-defilant statistiques">
+    <table>
+      <thead>
+        <tr>
+          <th>Catégorie</th>
+          <th>Produits</th>
+          <th>En rupture</th>
+          <th>Articles en stock</th>
+          <th>Valeur du stock HT</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (ligne of statistiques(); track ligne.categorie) {
+          <tr>
+            <td>{{ ligne.categorie }}</td>
+            <td class="nombre">{{ ligne.nb_produits }}</td>
+            <td class="nombre" [class.rupture]="ligne.nb_en_rupture > 0">{{ ligne.nb_en_rupture }}</td>
+            <td class="nombre">{{ ligne.nb_articles }}</td>
+            <td class="nombre">{{ ligne.valeur_stock_ht | currency: 'EUR' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="sous-titre">Produits</h2>
+  <div class="tableau-defilant">
+    <table>
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Nom</th>
+          <th>Marque</th>
+          <th>Catégorie</th>
+          <th>Prix HT</th>
+          <th>TVA</th>
+          <th>Prix TTC</th>
+          <th>Stock</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (produit of produits(); track produit.id) {
+          <tr>
+            <td><img [src]="produit.imageUrl || 'produits/aucune-image.svg'" [alt]="produit.nom"></td>
+            <td><a [routerLink]="['/produits', produit.id]">{{ produit.nom }}</a></td>
+            <td>{{ produit.marque?.nom }}</td>
+            <td>{{ produit.categorie?.nom }}</td>
+            <td class="nombre">{{ produit.prixHt | currency: 'EUR' }}</td>
+            <td class="nombre">{{ produit.tva }} %</td>
+            <td class="nombre">{{ produit.prixTtc | currency: 'EUR' }}</td>
+            <td class="nombre" [class.rupture]="produit.stock === 0">{{ produit.stock }}</td>
+            <td class="actions">
+              <a [routerLink]="['/admin/produits', produit.id]" class="bouton bouton-petit">Modifier</a>
+              <button class="bouton bouton-petit bouton-danger" (click)="supprimer(produit)">Supprimer</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,25 +1,54 @@
-<div class="page-background">
-  <h1>CREATION DE COMPTE</h1>
+<div class="page-compte">
+  <h1>CRÉATION DE COMPTE</h1>
 
   <div class="compte-container">
-    <!--Deja client-->
-    <div class="section-haute">
-      <h2>VOS IDENTIFIANTS</h2>
-      
-      <form class="compte-form">
-        <input type="email" placeholder="Email" required>
-        <input type="password" placeholder="Mot de passe" required>
-        
-        <button type="submit" class="btn-green">CREEZ UN COMPTE</button>
+    <h2>VOS INFORMATIONS</h2>
 
-        <div class="checkbox-group">
-          <input type="checkbox" id="stay">
-          <label required for="stay">Accepter les conditions d'utilisation</label>
-        </div>
+    <form class="compte-form" #formulaire="ngForm" (ngSubmit)="creerCompte()">
+      <div class="champ">
+        <label for="prenom">Prénom</label>
+        <input id="prenom" name="prenom" [(ngModel)]="compte.prenom" required maxlength="100" autocomplete="given-name">
+      </div>
 
-        <a href="#" class="forgot-password">Voire les condituion d'utilisation</a>
-        
-      </form>
-    </div>
+      <div class="champ">
+        <label for="nom">Nom</label>
+        <input id="nom" name="nom" [(ngModel)]="compte.nom" required maxlength="100" autocomplete="family-name">
+      </div>
+
+      <div class="champ">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" [(ngModel)]="compte.email" #email="ngModel" required email
+               autocomplete="email">
+        @if (email.touched && email.invalid) {
+          <p class="erreur-champ">Saisissez une adresse email valide.</p>
+        }
+      </div>
+
+      <div class="champ">
+        <label for="motDePasse">Mot de passe</label>
+        <input id="motDePasse" name="motDePasse" type="password" [(ngModel)]="compte.motDePasse" #motDePasse="ngModel"
+               required minlength="8" maxlength="72" autocomplete="new-password">
+        <p class="aide">8 caractères minimum.</p>
+        @if (motDePasse.touched && motDePasse.invalid) {
+          <p class="erreur-champ">Le mot de passe doit contenir au moins 8 caractères.</p>
+        }
+      </div>
+
+      <div class="case-a-cocher">
+        <input type="checkbox" id="conditions" name="conditions" [(ngModel)]="conditionsAcceptees" required>
+        <label for="conditions">
+          J'accepte les <a routerLink="/mentions-legales" target="_blank">conditions d'utilisation et la politique
+          de confidentialité</a>
+        </label>
+      </div>
+
+      @if (erreur()) {
+        <p class="message-erreur">{{ erreur() }}</p>
+      }
+
+      <button type="submit" class="bouton" [disabled]="formulaire.invalid || envoiEnCours()">CRÉER MON COMPTE</button>
+    </form>
+
+    <p class="deja-client">Déjà client ? <a routerLink="/compte">Se connecter</a></p>
   </div>
 </div>

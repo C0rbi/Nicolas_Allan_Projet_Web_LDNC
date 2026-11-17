@@ -1,0 +1,67 @@
+<div class="conteneur">
+  <h1 class="titre-page">{{ id ? 'Modifier un produit' : 'Ajouter un produit' }}</h1>
+
+  @if (produit(); as produit) {
+    <form class="carte formulaire" #formulaire="ngForm" (ngSubmit)="enregistrer()">
+      <div class="colonnes">
+        <div>
+          <label for="nom">Nom *</label>
+          <input id="nom" name="nom" [(ngModel)]="produit.nom" #nom="ngModel" required maxlength="255">
+          @if (nom.touched && nom.invalid) {
+            <p class="erreur-champ">Le nom est obligatoire.</p>
+          }
+
+          <label for="description">Description</label>
+          <textarea id="description" name="description" rows="4" [(ngModel)]="produit.description"
+                    maxlength="255"></textarea>
+          <p class="aide">255 caractères maximum.</p>
+
+          <label for="marque">Marque</label>
+          <select id="marque" name="marque" [(ngModel)]="produit.marque" [compareWith]="memeId">
+            <option [ngValue]="null">Aucune</option>
+            @for (marque of marques(); track marque.id) {
+              <option [ngValue]="marque">{{ marque.nom }}</option>
+            }
+          </select>
+
+          <label for="categorie">Catégorie</label>
+          <select id="categorie" name="categorie" [(ngModel)]="produit.categorie" [compareWith]="memeId">
+            <option [ngValue]="null">Aucune</option>
+            @for (categorie of categories(); track categorie.id) {
+              <option [ngValue]="categorie">{{ categorie.parentId ? '— ' + categorie.nom : categorie.nom }}</option>
+            }
+          </select>
+        </div>
+
+        <div>
+          <label for="prixHt">Prix HT (€) *</label>
+          <input id="prixHt" name="prixHt" type="number" min="0" step="0.01" [(ngModel)]="produit.prixHt" required>
+
+          <label for="tva">TVA (%) *</label>
+          <input id="tva" name="tva" type="number" min="0" step="0.1" [(ngModel)]="produit.tva" required>
+          <p class="aide">Prix TTC : {{ produit.prixHt * (1 + produit.tva / 100) | number: '1.2-2' }} €</p>
+
+          <label for="stock">Stock *</label>
+          <input id="stock" name="stock" type="number" min="0" step="1" [(ngModel)]="produit.stock" required>
+
+          <label for="imageUrl">Image</label>
+          <input id="imageUrl" name="imageUrl" [(ngModel)]="produit.imageUrl" maxlength="255"
+                 placeholder="produits/processeur.svg">
+          <p class="aide">Fichier du dossier webapp/public (ex. produits/souris.svg) ou adresse https://...</p>
+          <img class="apercu" [src]="produit.imageUrl || 'produits/aucune-image.svg'" alt="Aperçu de l'image">
+        </div>
+      </div>
+
+      @if (erreur()) {
+        <p class="message-erreur">{{ erreur() }}</p>
+      }
+
+      <div class="boutons">
+        <a routerLink="/admin" class="bouton bouton-secondaire">Annuler</a>
+        <button type="submit" class="bouton" [disabled]="formulaire.invalid || envoiEnCours()">Enregistrer</button>
+      </div>
+    </form>
+  } @else if (erreur()) {
+    <p class="message-erreur">{{ erreur() }} <a routerLink="/admin">Retour à la liste</a></p>
+  }
+</div>

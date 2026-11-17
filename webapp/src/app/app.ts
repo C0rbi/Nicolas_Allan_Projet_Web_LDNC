@@ -1,14 +1,23 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, OnInit, inject } from '@angular/core';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { Navbar } from './navbar/navbar';
+import { AuthService } from './services/auth';
+import { PanierService } from './services/panier';
 
 @Component({
   selector: 'app-root',
-  standalone: true, // pour Angular moderne
-  imports: [Navbar, RouterOutlet],
+  imports: [Navbar, RouterOutlet, RouterLink],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
 })
-export class App {
-  protected readonly title = signal('LDNC');
+export class App implements OnInit {
+  private auth = inject(AuthService);
+  private panierService = inject(PanierService);
+
+  ngOnInit(): void {
+    // Utilisateur resté connecté (token gardé dans le navigateur) : on récupère son panier
+    if (this.auth.estConnecte()) {
+      this.panierService.charger().subscribe();
+    }
+  }
 }

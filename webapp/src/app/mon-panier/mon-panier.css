@@ -1,0 +1,115 @@
+.panier-vide {
+  padding: 40px;
+  text-align: center;
+}
+
+.page-panier {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.lignes {
+  flex: 1;
+  min-width: 0;
+}
+
+.ligne {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--bordure);
+  background-color: var(--blanc);
+}
+
+.ligne img {
+  width: 90px;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+}
+
+.infos {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nom {
+  color: var(--texte);
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.nom:hover {
+  color: var(--vert);
+  text-decoration: underline;
+}
+
+.prix-unitaire {
+  color: var(--texte-gris);
+  font-size: 0.85rem;
+}
+
+.quantite {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.quantite button {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--vert);
+  border-radius: 50%;
+  background-color: var(--blanc);
+  color: var(--vert);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.quantite button:disabled {
+  border-color: var(--bordure);
+  color: var(--bordure);
+  cursor: not-allowed;
+}
+
+.sous-total {
+  min-width: 110px;
+  font-weight: bold;
+  text-align: right;
+}
+
+.vider {
+  margin-top: 12px;
+}
+
+.recapitulatif {
+  width: 300px;
+}
+
+.ligne-recap {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.total {
+  align-items: baseline;
+  padding-top: 10px;
+  border-top: 1px solid var(--bordure);
+  font-weight: bold;
+}
+
+@media (max-width: 800px) {
+  .page-panier,
+  .ligne {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .recapitulatif {
+    width: auto;
+  }
+}
